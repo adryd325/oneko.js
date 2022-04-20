@@ -5,7 +5,7 @@
     nekoEl.id = "oneko";
     nekoEl.style.width = "32px";
     nekoEl.style.height = "32px";
-    nekoEl.style.position = "absolute";
+    nekoEl.style.position = "fixed";
     nekoEl.style.imageRendering = "pixelated";
     nekoEl.style.left = "32px";
     nekoEl.style.top = "32px";
