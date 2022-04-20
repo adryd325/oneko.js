@@ -87,6 +87,44 @@
         idleAnimationFrame = 0;
     }
 
+    function idle() {
+        idleTime += 1;
+
+        // every ~ 20 seconds
+        if (
+            idleTime > 10 &&
+            Math.floor(Math.random() * 200) == 0 &&
+            idleAnimation == null
+        ) {
+            idleAnimation = ["sleeping", "scratch"][
+                Math.floor(Math.random() * 2)
+            ];
+        }
+
+        switch (idleAnimation) {
+            case "sleeping":
+                if (idleAnimationFrame < 8) {
+                    setSprite("tired", 0);
+                    break;
+                }
+                setSprite("sleeping", Math.floor(idleAnimationFrame / 4));
+                if (idleAnimationFrame > 192) {
+                    resetIdleAnimation();
+                }
+                break;
+            case "scratch":
+                setSprite("scratch", idleAnimationFrame);
+                if (idleAnimationFrame > 9) {
+                    resetIdleAnimation();
+                }
+                break;
+            default:
+                setSprite("idle", 0);
+                return;
+        }
+        idleAnimationFrame += 1;
+    }
+
     function frame() {
         frameCount += 1;
         const diffX = nekoPosX - mousePosX;
@@ -94,41 +132,7 @@
         const distance = Math.sqrt(diffX ** 2 + diffY ** 2);
 
         if (distance < nekoSpeed || distance < 48) {
-            idleTime += 1;
-
-            // every ~ 20 seconds
-            if (
-                idleTime > 10 &&
-                Math.floor(Math.random() * 200) == 0 &&
-                idleAnimation == null
-            ) {
-                idleAnimation = ["sleeping", "scratch"][
-                    Math.floor(Math.random() * 2)
-                ];
-            }
-
-            switch (idleAnimation) {
-                case "sleeping":
-                    if (idleAnimationFrame < 8) {
-                        setSprite("tired", 0);
-                        break;
-                    }
-                    setSprite("sleeping", Math.floor(idleAnimationFrame / 4));
-                    if (idleAnimationFrame > 192) {
-                        resetIdleAnimation();
-                    }
-                    break;
-                case "scratch":
-                    setSprite("scratch", idleAnimationFrame);
-                    if (idleAnimationFrame > 9) {
-                        resetIdleAnimation();
-                    }
-                    break;
-                default:
-                    setSprite("idle", 0);
-                    return;
-            }
-            idleAnimationFrame += 1;
+            idle();
             return;
         }
 
