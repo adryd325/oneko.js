@@ -76,8 +76,9 @@ export class ONekoElement extends HTMLElement {
 
   constructor() {
     super();
-
-    /** @param {MouseEvent} ev **/
+    
+    
+    // todo: make cat follow mouse stuff separate or optional and make element more versatile
     this.onMouseMove = (e) => {
       // todo: make this better
       const [x, y] = this.style.position === "fixed"
@@ -196,6 +197,7 @@ export class ONekoElement extends HTMLElement {
   }
 
   // todo: use transform or similar for better performance
+  // it could be possible to animate using animation api, it may be hard to get performance right with the data changing so often though
   updatePosition() {
     this.style.left = `${this.neko.x - 16}px`;
     this.style.top = `${this.neko.y - 16}px`;
@@ -203,7 +205,7 @@ export class ONekoElement extends HTMLElement {
   }
 
   connectedCallback() {
-    // todo: a lot of this might be better suited to be styled manually
+    // `||=` so the styles can still be overriden
     this.style.backgroundImage ||= "url('./oneko.gif')";
     this.style.imageRendering ||= "pixelated";
     this.style.width ||= `32px`;
