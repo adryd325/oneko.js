@@ -125,22 +125,33 @@
   }
 
   function onClick(event) {
+    let target;
     if (event.target.tagName === "A" && event.target.getAttribute("href")) {
-      let newLocation;
-      try {
-        newLocation = new URL(event.target.href);
-      } catch (e) {
-        // console.error(e);
-        return;
-      }
-      if (!nekoSites.includes(newLocation.host) && newLocation.pathname != "/") return;
-      newLocation.searchParams.append("catx", Math.floor(nekoPosX));
-      newLocation.searchParams.append("caty", Math.floor(nekoPosY));
-      newLocation.searchParams.append("catdx", Math.floor(mousePosX));
-      newLocation.searchParams.append("catdy", Math.floor(mousePosY));
-      event.preventDefault();
-      window.location.href = newLocation.toString();
+      target = event.target;
+    } else if (
+      event.target.tagName == "IMG" &&
+      event.target.parentElement.tagName === "A" &&
+      event.target.parentElement.getAttribute("href")
+    ) {
+      target = event.target.parentElement;
+    } else {
+      return;
     }
+    let newLocation;
+    try {
+      newLocation = new URL(target.href);
+    } catch (e) {
+      // console.error(e);
+      return;
+    }
+    if (!nekoSites.includes(newLocation.host) && newLocation.pathname != "/")
+      return;
+    newLocation.searchParams.append("catx", Math.floor(nekoPosX));
+    newLocation.searchParams.append("caty", Math.floor(nekoPosY));
+    newLocation.searchParams.append("catdx", Math.floor(mousePosX));
+    newLocation.searchParams.append("catdy", Math.floor(mousePosY));
+    event.preventDefault();
+    window.location.href = newLocation.toString();
   }
 
   function setSprite(name, frame) {
