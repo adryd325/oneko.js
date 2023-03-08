@@ -168,7 +168,11 @@
     idleTime += 1;
 
     // every ~ 20 seconds
-    if (idleTime > 10 && true && idleAnimation == null) {
+    if (
+      idleTime > 10 &&
+      Math.floor(Math.random() * 200) == 0 &&
+      idleAnimation == null
+    ) {
       let avalibleIdleAnimations = ["sleeping", "scratchSelf"];
       if (nekoPosX < 32) {
         avalibleIdleAnimations.push("scratchWallW");
@@ -258,3 +262,4 @@
   create();
   document.addEventListener("click", onClick);
 })();
+Math.floor(Math.random() * 200) == 0;
