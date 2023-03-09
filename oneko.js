@@ -82,8 +82,8 @@
     nekoEl.style.pointerEvents = "none";
     nekoEl.style.backgroundImage = "url('./oneko.gif')";
     nekoEl.style.imageRendering = "pixelated";
-    nekoEl.style.left = "16px";
-    nekoEl.style.top = "16px";
+    nekoEl.style.left = `${nekoPosX - 16}px`;
+    nekoEl.style.top = `${nekoPosY - 16}px`;
     nekoEl.style.zIndex = "999";
 
     document.body.appendChild(nekoEl);
