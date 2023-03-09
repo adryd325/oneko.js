@@ -145,7 +145,7 @@
       // console.error(e);
       return;
     }
-    if (!nekoSites.includes(newLocation.host) && newLocation.pathname != "/")
+    if (!nekoSites.includes(newLocation.host) || newLocation.pathname != "/")
       return;
     newLocation.searchParams.append("catx", Math.floor(nekoPosX));
     newLocation.searchParams.append("caty", Math.floor(nekoPosY));
@@ -263,4 +263,3 @@
   create();
   document.addEventListener("click", onClick);
 })();
-Math.floor(Math.random() * 200) == 0;
