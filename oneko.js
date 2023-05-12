@@ -6,6 +6,11 @@
   let nekoPosY = 32;
   let mousePosX = 0;
   let mousePosY = 0;
+  const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+  if (isReduced) {
+    return;
+  }
+
   let frameCount = 0;
   let idleTime = 0;
   let idleAnimation = null;
