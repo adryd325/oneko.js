@@ -101,7 +101,7 @@ const imageFile = 'data:image/gif;base64,R0lGODlhAAGAAJECAAAAAP///wAAAAAAACH5BAE
     nekoEl.style.imageRendering = "pixelated";
     nekoEl.style.left = `${nekoPosX - 16}px`;
     nekoEl.style.top = `${nekoPosY - 16}px`;
-    nekoEl.style.zIndex = "999";
+    nekoEl.style.zIndex = "2147483647";
 
     document.body.appendChild(nekoEl);
 
