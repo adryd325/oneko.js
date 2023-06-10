@@ -93,10 +93,10 @@
 
     document.body.appendChild(nekoEl);
 
-    document.onmousemove = (event) => {
+    document.addEventListener("mousemove",function(){
       mousePosX = event.clientX;
       mousePosY = event.clientY;
-    };
+    });
 
     window.onekoInterval = setInterval(frame, 100);
   }
