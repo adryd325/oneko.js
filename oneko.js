@@ -89,7 +89,7 @@
     nekoEl.style.imageRendering = "pixelated";
     nekoEl.style.left = `${nekoPosX - 16}px`;
     nekoEl.style.top = `${nekoPosY - 16}px`;
-    nekoEl.style.zIndex = 99999999999999;
+    nekoEl.style.zIndex = Number.MAX_VALUE;
 
     document.body.appendChild(nekoEl);
 
