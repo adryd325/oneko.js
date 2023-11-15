@@ -1,8 +1,22 @@
-// oneko.js: https://github.com/adryd325/oneko.js
+// oneko.js: https://github.com/adryd325/oneko.js (webring variant)
 
 (function oneko() {
   const nekoEl = document.createElement("div");
-  // Hardcoded for privacy reasons.
+
+  let nekoPosX = 32;
+  let nekoPosY = 32;
+
+  let mousePosX = 0;
+  let mousePosY = 0;
+
+  const isReducedMotion =
+    window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
+    window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+  
+  if (isReducedMotion) {
+    return;
+  }
+
   const nekoSites = [
     "adryd.com",
     "localhost",
@@ -10,17 +24,10 @@
     "fade.nya.rest",
     "fleepy.tv",
     "maia.crimew.gay",
+    "spookyghost.zone",
+    "noelle.df1.dev"
   ];
-  let nekoPosX = 32;
-  let nekoPosY = 32;
-  let mousePosX = 0;
-  let mousePosY = 0;
-
-  const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-  if (isReduced) {
-    return;
-  }
-
+  
   try {
     const searchParams = location.search
       .replace("?", "")
@@ -39,11 +46,42 @@
     console.error("oneko.js: failed to parse query params.");
     console.error(e);
   }
+  
+  function onClick(event) {
+    let target;
+    if (event.target.tagName === "A" && event.target.getAttribute("href")) {
+      target = event.target;
+    } else if (
+      event.target.tagName == "IMG" &&
+      event.target.parentElement.tagName === "A" &&
+      event.target.parentElement.getAttribute("href")
+    ) {
+      target = event.target.parentElement;
+    } else {
+      return;
+    }
+    let newLocation;
+    try {
+      newLocation = new URL(target.href);
+    } catch (e) {;
+      return;
+    }
+    if (!nekoSites.includes(newLocation.host) || newLocation.pathname != "/")
+      return;
+    newLocation.searchParams.append("catx", Math.floor(nekoPosX));
+    newLocation.searchParams.append("caty", Math.floor(nekoPosY));
+    newLocation.searchParams.append("catdx", Math.floor(mousePosX));
+    newLocation.searchParams.append("catdy", Math.floor(mousePosY));
+    event.preventDefault();
+    window.location.href = newLocation.toString();
+  }
+  document.addEventListener("click", onClick);
 
   let frameCount = 0;
   let idleTime = 0;
   let idleAnimation = null;
   let idleAnimationFrame = 0;
+
   const nekoSpeed = 10;
   const spriteSets = {
     idle: [[-3, -3]],
@@ -108,7 +146,7 @@
     ],
   };
 
-  function create() {
+  function init() {
     nekoEl.id = "oneko";
     nekoEl.style.width = "32px";
     nekoEl.style.height = "32px";
@@ -118,46 +156,30 @@
     nekoEl.style.imageRendering = "pixelated";
     nekoEl.style.left = `${nekoPosX - 16}px`;
     nekoEl.style.top = `${nekoPosY - 16}px`;
-    nekoEl.style.zIndex = "999";
+    nekoEl.style.zIndex = Number.MAX_VALUE;
 
     document.body.appendChild(nekoEl);
 
-    document.onmousemove = (event) => {
+    document.addEventListener("mousemove", function (event) {
       mousePosX = event.clientX;
       mousePosY = event.clientY;
-    };
-
-    window.onekoInterval = setInterval(frame, 100);
+    });
+    
+    window.requestAnimationFrame(onAnimatonFrame);
   }
 
-  function onClick(event) {
-    let target;
-    if (event.target.tagName === "A" && event.target.getAttribute("href")) {
-      target = event.target;
-    } else if (
-      event.target.tagName == "IMG" &&
-      event.target.parentElement.tagName === "A" &&
-      event.target.parentElement.getAttribute("href")
-    ) {
-      target = event.target.parentElement;
-    } else {
-      return;
+  let lastFrameTimestamp;
+
+  function onAnimatonFrame(timestamp) {
+    if (!lastFrameTimestamp) {
+      lastFrameTimestamp = timestamp;
     }
-    let newLocation;
-    try {
-      newLocation = new URL(target.href);
-    } catch (e) {
-      // console.error(e);
-      return;
-    }
-    if (!nekoSites.includes(newLocation.host) || newLocation.pathname != "/")
-      return;
-    newLocation.searchParams.append("catx", Math.floor(nekoPosX));
-    newLocation.searchParams.append("caty", Math.floor(nekoPosY));
-    newLocation.searchParams.append("catdx", Math.floor(mousePosX));
-    newLocation.searchParams.append("catdy", Math.floor(mousePosY));
-    event.preventDefault();
-    window.location.href = newLocation.toString();
+    if (timestamp - lastFrameTimestamp > 100) {
+      lastFrameTimestamp = timestamp
+      frame()
+    } 
+
+    window.requestAnimationFrame(onAnimatonFrame);
   }
 
   function setSprite(name, frame) {
@@ -219,7 +241,6 @@
           resetIdleAnimation();
         }
         break;
-
       default:
         setSprite("idle", 0);
         return;
@@ -249,6 +270,7 @@
       return;
     }
 
+    let direction;
     direction = diffY / distance > 0.5 ? "N" : "";
     direction += diffY / distance < -0.5 ? "S" : "";
     direction += diffX / distance > 0.5 ? "W" : "";
@@ -265,6 +287,5 @@
     nekoEl.style.top = `${nekoPosY - 16}px`;
   }
 
-  create();
-  document.addEventListener("click", onClick);
+  init();
 })();
