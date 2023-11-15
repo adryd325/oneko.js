@@ -105,21 +105,24 @@
       mousePosX = event.clientX;
       mousePosY = event.clientY;
     });
-
+    
     window.requestAnimationFrame(onAnimatonFrame);
   }
 
   let lastFrameTimestamp;
 
   function onAnimatonFrame(timestamp) {
+    // Stops execution if the neko element is removed from DOM
+    if (!nekoEl.isConnected) {
+      return;
+    }
     if (!lastFrameTimestamp) {
       lastFrameTimestamp = timestamp;
     }
     if (timestamp - lastFrameTimestamp > 100) {
       lastFrameTimestamp = timestamp
       frame()
-    } 
-
+    }
     window.requestAnimationFrame(onAnimatonFrame);
   }
 
