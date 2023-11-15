@@ -2,12 +2,18 @@
 
 (function oneko() {
   const nekoEl = document.createElement("div");
+
   let nekoPosX = 32;
   let nekoPosY = 32;
+
   let mousePosX = 0;
   let mousePosY = 0;
-  const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-  if (isReduced) {
+
+  const isReducedMotion =
+    window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
+    window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+  
+  if (isReducedMotion) {
     return;
   }
 
@@ -15,6 +21,7 @@
   let idleTime = 0;
   let idleAnimation = null;
   let idleAnimationFrame = 0;
+
   const nekoSpeed = 10;
   const spriteSets = {
     idle: [[-3, -3]],
@@ -79,7 +86,7 @@
     ],
   };
 
-  function create() {
+  function init() {
     nekoEl.id = "oneko";
     nekoEl.style.width = "32px";
     nekoEl.style.height = "32px";
@@ -93,12 +100,26 @@
 
     document.body.appendChild(nekoEl);
 
-    document.addEventListener("mousemove",function(){
+    document.addEventListener("mousemove", function (event) {
       mousePosX = event.clientX;
       mousePosY = event.clientY;
     });
 
-    window.onekoInterval = setInterval(frame, 100);
+    window.requestAnimationFrame(onAnimatonFrame);
+  }
+
+  let lastFrameTimestamp;
+
+  function onAnimatonFrame(timestamp) {
+    if (!lastFrameTimestamp) {
+      lastFrameTimestamp = timestamp;
+    }
+    if (timestamp - lastFrameTimestamp > 100) {
+      lastFrameTimestamp = timestamp
+      frame()
+    } 
+
+    window.requestAnimationFrame(onAnimatonFrame);
   }
 
   function setSprite(name, frame) {
@@ -206,5 +227,5 @@
     nekoEl.style.top = `${nekoPosY - 16}px`;
   }
 
-  create();
+  init();
 })();
