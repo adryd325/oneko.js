@@ -8,7 +8,7 @@ function neko() {
 	var idleTime = 0;
 	var idleAnimation = null;
 	var idleAnimationFrame = 0;
-	var nekoSpeed = 12.5;
+	var nekoSpeed = 10;
 	var direction;
 	var IE = document.all ? true : false;
 	var spriteSets = {
@@ -63,7 +63,7 @@ function neko() {
 		nekoEl.style.height = '32px';
 		nekoEl.style.position = 'absolute';
 		nekoEl.style.pointerEvents = "none";
-		nekoEl.style.backgroundImage = "url('/static/neko/neko.gif')";
+		nekoEl.style.backgroundImage = "url('oneko.gif')";
 		nekoEl.style.imageRendering = 'pixelated';
 		nekoEl.style.left = '32px';
 		nekoEl.style.top = '32px';
