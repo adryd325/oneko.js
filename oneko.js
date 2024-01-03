@@ -12,7 +12,7 @@
   const isReducedMotion =
     window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
     window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-  
+
   if (isReducedMotion) {
     return;
   }
@@ -105,13 +105,13 @@
       mousePosX = event.clientX;
       mousePosY = event.clientY;
     });
-    
-    window.requestAnimationFrame(onAnimatonFrame);
+
+    window.requestAnimationFrame(onAnimationFrame);
   }
 
   let lastFrameTimestamp;
 
-  function onAnimatonFrame(timestamp) {
+  function onAnimationFrame(timestamp) {
     // Stops execution if the neko element is removed from DOM
     if (!nekoEl.isConnected) {
       return;
@@ -123,7 +123,7 @@
       lastFrameTimestamp = timestamp
       frame()
     }
-    window.requestAnimationFrame(onAnimatonFrame);
+    window.requestAnimationFrame(onAnimationFrame);
   }
 
   function setSprite(name, frame) {

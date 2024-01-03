@@ -12,7 +12,7 @@
   const isReducedMotion =
     window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
     window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-  
+
   if (isReducedMotion) {
     return;
   }
@@ -27,7 +27,7 @@
     "spookyghost.zone",
     "noelle.df1.dev"
   ];
-  
+
   try {
     const searchParams = location.search
       .replace("?", "")
@@ -46,7 +46,7 @@
     console.error("oneko.js: failed to parse query params.");
     console.error(e);
   }
-  
+
   function onClick(event) {
     let target;
     if (event.target.tagName === "A" && event.target.getAttribute("href")) {
@@ -165,13 +165,13 @@
       mousePosX = event.clientX;
       mousePosY = event.clientY;
     });
-    
-    window.requestAnimationFrame(onAnimatonFrame);
+
+    window.requestAnimationFrame(onAnimationFrame);
   }
 
   let lastFrameTimestamp;
 
-  function onAnimatonFrame(timestamp) {
+  function onAnimationFrame(timestamp) {
     // Stops execution if the neko element is removed from DOM
     if (!nekoEl.isConnected) {
       return;
@@ -182,9 +182,9 @@
     if (timestamp - lastFrameTimestamp > 100) {
       lastFrameTimestamp = timestamp
       frame()
-    } 
+    }
 
-    window.requestAnimationFrame(onAnimatonFrame);
+    window.requestAnimationFrame(onAnimationFrame);
   }
 
   function setSprite(name, frame) {
