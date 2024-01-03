@@ -25,7 +25,9 @@
     "fleepy.tv",
     "maia.crimew.gay",
     "spookyghost.zone",
-    "noelle.df1.dev"
+    "noelle.df1.dev",
+    "www.kibty.town",
+    "kibty.town"
   ];
 
   try {
