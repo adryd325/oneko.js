@@ -33,15 +33,16 @@
       .replace("?", "")
       .split("&")
       .map((keyvaluepair) => keyvaluepair.split("="));
-    // This is so much repeated code, I don't like it
-    tmp = searchParams.find((a) => a[0] == "catx");
-    if (tmp && tmp[1]) nekoPosX = parseInt(tmp[1]);
-    tmp = searchParams.find((a) => a[0] == "caty");
-    if (tmp && tmp[1]) nekoPosY = parseInt(tmp[1]);
-    tmp = searchParams.find((a) => a[0] == "catdx");
-    if (tmp && tmp[1]) mousePosX = parseInt(tmp[1]);
-    tmp = searchParams.find((a) => a[0] == "catdy");
-    if (tmp && tmp[1]) mousePosY = parseInt(tmp[1]);
+
+    function posFind(string) {
+      const result = searchParams.find((a) => a[0] == string);
+      if (result && result[1]) return parseInt(result[1]);
+    }
+
+    nekoPosX = posFind("catx") || 32;
+    nekoPosY = posFind("caty") || 32;
+    mousePosX = posFind("catdx") || 0;
+    mousePosY = posFind("catdy") || 0;
   } catch (e) {
     console.error("oneko.js: failed to parse query params.");
     console.error(e);
