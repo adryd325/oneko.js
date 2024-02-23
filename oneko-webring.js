@@ -25,7 +25,8 @@
     "spookyghost.zone",
     "noelle.df1.dev",
     "www.kibty.town",
-    "kibty.town"
+    "kibty.town",
+    "avasilver.dev"
   ];
 
   try {
