@@ -26,7 +26,8 @@
     "noelle.df1.dev",
     "www.kibty.town",
     "kibty.town",
-    "avasilver.dev"
+    "avasilver.dev",
+    "tris.fyi"
   ];
 
   try {
