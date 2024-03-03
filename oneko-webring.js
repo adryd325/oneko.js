@@ -27,7 +27,8 @@
     "www.kibty.town",
     "kibty.town",
     "avasilver.dev",
-    "tris.fyi"
+    "tris.fyi", 
+    "breq.dev"
   ];
 
   try {
