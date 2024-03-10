@@ -28,7 +28,8 @@
     "kibty.town",
     "avasilver.dev",
     "tris.fyi", 
-    "breq.dev"
+    "breq.dev",
+    "oon.nz"
   ];
 
   try {
