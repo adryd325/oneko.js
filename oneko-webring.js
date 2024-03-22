@@ -15,38 +15,26 @@
   let mousePosX = 0;
   let mousePosY = 0;
 
+  // please use data-neko="true" on your A elements that link to another site with oneko-webring.js instead of this
+  // this is deprecated and will eventually be removed
   const nekoSites = [
-    "adryd.com",
     "localhost",
-    "c7.pm",
-    "fade.nya.rest",
-    "fleepy.tv",
-    "maia.crimew.gay",
-    "spookyghost.zone",
-    "noelle.df1.dev",
-    "www.kibty.town",
-    "kibty.town",
-    "avasilver.dev",
-    "tris.fyi", 
-    "breq.dev",
-    "oon.nz"
   ];
-
+  
   try {
     const searchParams = location.search
       .replace("?", "")
       .split("&")
       .map((keyvaluepair) => keyvaluepair.split("="));
-
-    function posFind(string) {
-      const result = searchParams.find((a) => a[0] == string);
-      if (result && result[1]) return parseInt(result[1]);
-    }
-
-    nekoPosX = posFind("catx") || 32;
-    nekoPosY = posFind("caty") || 32;
-    mousePosX = posFind("catdx") || 0;
-    mousePosY = posFind("catdy") || 0;
+    // This is so much repeated code, I don't like it
+    tmp = searchParams.find((a) => a[0] == "catx");
+    if (tmp && tmp[1]) nekoPosX = parseInt(tmp[1]);
+    tmp = searchParams.find((a) => a[0] == "caty");
+    if (tmp && tmp[1]) nekoPosY = parseInt(tmp[1]);
+    tmp = searchParams.find((a) => a[0] == "catdx");
+    if (tmp && tmp[1]) mousePosX = parseInt(tmp[1]);
+    tmp = searchParams.find((a) => a[0] == "catdy");
+    if (tmp && tmp[1]) mousePosY = parseInt(tmp[1]);
   } catch (e) {
     console.error("oneko.js: failed to parse query params.");
     console.error(e);
@@ -68,17 +56,20 @@
     let newLocation;
     try {
       newLocation = new URL(target.href);
-    } catch (e) {;
+    } catch (e) {
       return;
     }
-    if (!nekoSites.includes(newLocation.host) || newLocation.pathname != "/")
-      return;
-    newLocation.searchParams.append("catx", Math.floor(nekoPosX));
-    newLocation.searchParams.append("caty", Math.floor(nekoPosY));
-    newLocation.searchParams.append("catdx", Math.floor(mousePosX));
-    newLocation.searchParams.append("catdy", Math.floor(mousePosY));
-    event.preventDefault();
-    window.location.href = newLocation.toString();
+    if (
+      (nekoSites.includes(newLocation.host) && newLocation.pathname == "/") ||
+      target.dataset.neko
+    ) {
+      newLocation.searchParams.append("catx", Math.floor(nekoPosX));
+      newLocation.searchParams.append("caty", Math.floor(nekoPosY));
+      newLocation.searchParams.append("catdx", Math.floor(mousePosX));
+      newLocation.searchParams.append("catdy", Math.floor(mousePosY));
+      event.preventDefault();
+      window.location.href = newLocation.toString();
+    }
   }
   document.addEventListener("click", onClick);
 
