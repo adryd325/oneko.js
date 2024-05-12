@@ -164,7 +164,7 @@
       }
       idleAnimation =
         avalibleIdleAnimations[
-          Math.floor(Math.random() * avalibleIdleAnimations.length)
+        Math.floor(Math.random() * avalibleIdleAnimations.length)
         ];
     }
 
@@ -195,6 +195,50 @@
     }
     idleAnimationFrame += 1;
   }
+
+  function explodeHearts() {
+    console.log('explodeHearts');
+    const parent = nekoEl.parentElement;
+    const rect = nekoEl.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 10; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '❤';
+      // Add a random offset to the position
+      const offsetX = (Math.random() - 0.5) * 50;
+      const offsetY = (Math.random() - 0.5) * 50;
+      heart.style.left = `${centerX + offsetX - 16}px`;
+      heart.style.top = `${centerY + offsetY - 16}px`;
+      heart.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+      parent.appendChild(heart);
+
+      // Remove the heart after the animation finishes
+      setTimeout(() => {
+        parent.removeChild(heart);
+      }, 1000);
+    }
+  }
+
+  const style = document.createElement('style');
+  style.innerHTML = `
+      @keyframes heartBurst {
+          0% { transform: scale(0); opacity: 1; }
+          100% { transform: scale(1); opacity: 0; }
+      }
+      .heart {
+          position: absolute;
+          font-size: 2em;
+          animation: heartBurst 1s ease-out;
+          animation-fill-mode: forwards;
+          color: #ab9df2;
+      }
+  `;
+
+  document.head.appendChild(style);
+  nekoEl.addEventListener('click', explodeHearts);
 
   function frame() {
     frameCount += 1;
