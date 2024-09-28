@@ -134,6 +134,22 @@
       mousePosY = event.clientY;
     });
     
+    if (persistPosition) {
+      window.addEventListener("beforeunload", function (event) {
+        window.localStorage.setItem("oneko", JSON.stringify({
+          nekoPosX: nekoPosX,
+          nekoPosY: nekoPosY,
+          mousePosX: mousePosX,
+          mousePosY: mousePosY,
+          frameCount: frameCount,
+          idleTime: idleTime,
+          idleAnimation: idleAnimation,
+          idleAnimationFrame: idleAnimationFrame,
+          bgPos: nekoEl.style.backgroundPosition
+        }));
+      });
+    }
+    
     window.requestAnimationFrame(onAnimationFrame);
   }
 
@@ -150,19 +166,6 @@
     if (timestamp - lastFrameTimestamp > 100) {
       lastFrameTimestamp = timestamp;
       frame();
-      if (persistPosition) {
-        window.localStorage.setItem("oneko", JSON.stringify({
-          nekoPosX: nekoPosX,
-          nekoPosY: nekoPosY,
-          mousePosX: mousePosX,
-          mousePosY: mousePosY,
-          frameCount: frameCount,
-          idleTime: idleTime,
-          idleAnimation: idleAnimation,
-          idleAnimationFrame: idleAnimationFrame,
-          bgPos: nekoEl.style.backgroundPosition
-        }));
-      }
     }
     window.requestAnimationFrame(onAnimationFrame);
   }
