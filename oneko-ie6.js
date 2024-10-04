@@ -135,22 +135,22 @@ function neko() {
       Math.floor(Math.random() * 200) == 0 &&
       idleAnimation == null
     ) {
-      var avalibleIdleAnimations = ["sleeping", "scratchSelf"];
+      var availableIdleAnimations = ["sleeping", "scratchSelf"];
       if (nekoPosX < 32) {
-        avalibleIdleAnimations.push("scratchWallW");
+        availableIdleAnimations.push("scratchWallW");
       }
       if (nekoPosY < 32) {
-        avalibleIdleAnimations.push("scratchWallN");
+        availableIdleAnimations.push("scratchWallN");
       }
       if (nekoPosX > window.innerWidth - 32) {
-        avalibleIdleAnimations.push("scratchWallE");
+        availableIdleAnimations.push("scratchWallE");
       }
       if (nekoPosY > window.innerHeight - 32) {
-        avalibleIdleAnimations.push("scratchWallS");
+        availableIdleAnimations.push("scratchWallS");
       }
       idleAnimation =
-        avalibleIdleAnimations[
-          Math.floor(Math.random() * avalibleIdleAnimations.length)
+        availableIdleAnimations[
+          Math.floor(Math.random() * availableIdleAnimations.length)
         ];
     }
 
