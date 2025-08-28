@@ -101,6 +101,7 @@
     nekoEl.style.left = `${nekoPosX - 16}px`;
     nekoEl.style.top = `${nekoPosY - 16}px`;
     nekoEl.style.zIndex = Number.MAX_VALUE;
+	nekoEl.style.userselect = "none";
 
     let nekoFile = "./oneko.gif";
     const curScript = document.currentScript;
