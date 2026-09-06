@@ -10,14 +10,14 @@
   const nekoEl = document.createElement("div");
   let persistPosition = true;
 
-  let zoomLevel = 1;
-  let scaleFactor = 1;
-
   let nekoPosX = 32;
   let nekoPosY = 32;
   
   let mousePosX = 0;
   let mousePosY = 0;
+
+  let zoomLevel = 1;
+  let scaleFactor = 1;
 
   let frameCount = 0;
   let idleTime = 0;
@@ -109,6 +109,8 @@
         nekoPosY = storedNeko.nekoPosY;
         mousePosX = storedNeko.mousePosX;
         mousePosY = storedNeko.mousePosY;
+        zoomLevel = storedNeko.zoomLevel;
+        scaleFactor = storedNeko.scaleFactor;
         frameCount = storedNeko.frameCount;
         idleTime = storedNeko.idleTime;
         idleAnimation = storedNeko.idleAnimation;
@@ -124,8 +126,9 @@
     nekoEl.style.position = "fixed";
     nekoEl.style.pointerEvents = "none";
     nekoEl.style.imageRendering = "pixelated";
-    nekoEl.style.left = `${nekoPosX - 16}px`;
-    nekoEl.style.top = `${nekoPosY - 16}px`;
+    nekoEl.style.left = `${(nekoPosX - 16) * scaleFactor}px`;
+    nekoEl.style.top = `${(nekoPosY - 16) * scaleFactor}px`;
+    nekoEl.style.transform = `scale(${scaleFactor})`;
     nekoEl.style.zIndex = 2147483647;
 
     nekoEl.style.backgroundImage = `url(${nekoFile})`;
@@ -144,6 +147,8 @@
           nekoPosY: nekoPosY,
           mousePosX: mousePosX,
           mousePosY: mousePosY,
+          zoomLevel: zoomLevel,
+          scaleFactor: scaleFactor,
           frameCount: frameCount,
           idleTime: idleTime,
           idleAnimation: idleAnimation,
