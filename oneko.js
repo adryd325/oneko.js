@@ -16,6 +16,9 @@
   let mousePosX = 0;
   let mousePosY = 0;
 
+  let zoomLevel = 1;
+  let scaleFactor = 1;
+
   let frameCount = 0;
   let idleTime = 0;
   let idleAnimation = null;
@@ -106,6 +109,8 @@
         nekoPosY = storedNeko.nekoPosY;
         mousePosX = storedNeko.mousePosX;
         mousePosY = storedNeko.mousePosY;
+        zoomLevel = storedNeko.zoomLevel;
+        scaleFactor = storedNeko.scaleFactor;
         frameCount = storedNeko.frameCount;
         idleTime = storedNeko.idleTime;
         idleAnimation = storedNeko.idleAnimation;
@@ -121,8 +126,9 @@
     nekoEl.style.position = "fixed";
     nekoEl.style.pointerEvents = "none";
     nekoEl.style.imageRendering = "pixelated";
-    nekoEl.style.left = `${nekoPosX - 16}px`;
-    nekoEl.style.top = `${nekoPosY - 16}px`;
+    nekoEl.style.left = `${(nekoPosX - 16) * scaleFactor}px`;
+    nekoEl.style.top = `${(nekoPosY - 16) * scaleFactor}px`;
+    nekoEl.style.transform = `scale(${scaleFactor})`;
     nekoEl.style.zIndex = 2147483647;
 
     nekoEl.style.backgroundImage = `url(${nekoFile})`;
@@ -141,6 +147,8 @@
           nekoPosY: nekoPosY,
           mousePosX: mousePosX,
           mousePosY: mousePosY,
+          zoomLevel: zoomLevel,
+          scaleFactor: scaleFactor,
           frameCount: frameCount,
           idleTime: idleTime,
           idleAnimation: idleAnimation,
@@ -237,9 +245,35 @@
   }
 
   function frame() {
+    // rescale neko to appear correctly at non-integer display scales/zoom levels
+    if (zoomLevel != window.devicePixelRatio) {
+      let oldZoomLevel = zoomLevel;
+      zoomLevel = window.devicePixelRatio;
+      let roundOldZoomLevel = Math.max(Math.round(oldZoomLevel), 1);
+      let roundZoomLevel = Math.max(Math.round(zoomLevel), 1);
+
+      // rescale to the nearest integer multiple in real-world pixels
+      // effectively, 1.25x becomes 1x, 1.75x becomes 2x, etc.
+      scaleFactor = roundZoomLevel / zoomLevel;
+      nekoEl.style.transform = `scale(${scaleFactor})`;
+
+      // recalculate the mouse position
+      // otherwise neko will target the wrong spot until there's a new mouse event
+      mousePosX *= oldZoomLevel / zoomLevel;
+      mousePosY *= oldZoomLevel / zoomLevel;
+
+      // keep neko in the same place on the screen when the zoom level changes
+      if (roundOldZoomLevel != roundZoomLevel) {
+        nekoPosX *= roundOldZoomLevel / roundZoomLevel;
+        nekoPosY *= roundOldZoomLevel / roundZoomLevel;
+      }
+      nekoEl.style.left = `${(nekoPosX - 16) * scaleFactor}px`;
+      nekoEl.style.top = `${(nekoPosY - 16) * scaleFactor}px`;
+    }
+
     frameCount += 1;
-    const diffX = nekoPosX - mousePosX;
-    const diffY = nekoPosY - mousePosY;
+    const diffX = nekoPosX - mousePosX / scaleFactor;
+    const diffY = nekoPosY - mousePosY / scaleFactor;
     const distance = Math.sqrt(diffX ** 2 + diffY ** 2);
 
     if (distance < nekoSpeed || distance < 48) {
@@ -268,11 +302,11 @@
     nekoPosX -= (diffX / distance) * nekoSpeed;
     nekoPosY -= (diffY / distance) * nekoSpeed;
 
-    nekoPosX = Math.min(Math.max(16, nekoPosX), window.innerWidth - 16);
-    nekoPosY = Math.min(Math.max(16, nekoPosY), window.innerHeight - 16);
+    nekoPosX = Math.min(Math.max(16, nekoPosX), window.innerWidth / scaleFactor - 16);
+    nekoPosY = Math.min(Math.max(16, nekoPosY), window.innerHeight / scaleFactor - 16);
 
-    nekoEl.style.left = `${nekoPosX - 16}px`;
-    nekoEl.style.top = `${nekoPosY - 16}px`;
+    nekoEl.style.left = `${(nekoPosX - 16) * scaleFactor}px`;
+    nekoEl.style.top = `${(nekoPosY - 16) * scaleFactor}px`;
   }
 
   init();
