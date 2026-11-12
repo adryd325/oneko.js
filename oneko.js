@@ -8,6 +8,7 @@
   if (isReducedMotion) return;
 
   const nekoEl = document.createElement("div");
+  const listeners = new AbortController();
   let persistPosition = true;
 
   let nekoPosX = 32;
@@ -132,7 +133,7 @@
     document.addEventListener("mousemove", function (event) {
       mousePosX = event.clientX;
       mousePosY = event.clientY;
-    });
+    }, { signal: listeners.signal });
     
     if (persistPosition) {
       window.addEventListener("beforeunload", function (event) {
@@ -147,13 +148,14 @@
           idleAnimationFrame: idleAnimationFrame,
           bgPos: nekoEl.style.backgroundPosition
         }));
-      });
+      }, { signal: listeners.signal });
     }
     
     const interval = setInterval(() => {
       // Stops execution if the neko element is removed from DOM
       if (!nekoEl.isConnected) {
         clearInterval(interval);
+        listeners.abort();
         return;
       }
       frame();
