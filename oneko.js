@@ -150,24 +150,14 @@
       });
     }
     
-    window.requestAnimationFrame(onAnimationFrame);
-  }
-
-  let lastFrameTimestamp;
-
-  function onAnimationFrame(timestamp) {
-    // Stops execution if the neko element is removed from DOM
-    if (!nekoEl.isConnected) {
-      return;
-    }
-    if (!lastFrameTimestamp) {
-      lastFrameTimestamp = timestamp;
-    }
-    if (timestamp - lastFrameTimestamp > 100) {
-      lastFrameTimestamp = timestamp;
+    const interval = setInterval(() => {
+      // Stops execution if the neko element is removed from DOM
+      if (!nekoEl.isConnected) {
+        clearInterval(interval);
+        return;
+      }
       frame();
-    }
-    window.requestAnimationFrame(onAnimationFrame);
+    }, 100);
   }
 
   function setSprite(name, frame) {
