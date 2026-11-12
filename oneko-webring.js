@@ -8,6 +8,7 @@
   if (isReducedMotion) return;
 
   const nekoEl = document.createElement("div");
+  const listeners = new AbortController();
 
   let nekoPosX = 32;
   let nekoPosY = 32;
@@ -64,7 +65,7 @@
       window.location.href = newLocation.toString();
     }
   }
-  document.addEventListener("click", onClick);
+  document.addEventListener("click", onClick, { signal: listeners.signal });
 
   let frameCount = 0;
   let idleTime = 0;
@@ -159,12 +160,13 @@
     document.addEventListener("mousemove", function (event) {
       mousePosX = event.clientX;
       mousePosY = event.clientY;
-    });
+    }, { signal: listeners.signal });
 
     const interval = setInterval(() => {
       // Stops execution if the neko element is removed from DOM
       if (!nekoEl.isConnected) {
         clearInterval(interval);
+        listeners.abort();
         return;
       }
       frame();
